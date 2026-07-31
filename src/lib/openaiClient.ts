@@ -2,8 +2,9 @@ import OpenAI from "openai";
 import { ProxyAgent, fetch as undiciFetch } from "undici";
 
 /**
- * System proxy (e.g. MonoProxy) is used by the browser/curl but NOT by Node fetch.
- * Set OPENAI_HTTPS_PROXY (or HTTPS_PROXY) so the OpenAI client routes through it.
+ * System proxy (e.g. MonoProxy) works for browsers/curl but NOT for Node fetch.
+ * Locally set OPENAI_HTTPS_PROXY=http://127.0.0.1:8118
+ * Production (Vercel / EU-US): leave it unset — call api.openai.com directly.
  */
 function resolveProxyUrl(): string | undefined {
   return (
@@ -23,24 +24,26 @@ export type CreateOpenAIClientOptions = {
   maxRetries?: number;
 };
 
+/** Shared OpenAI client used by chat, onboarding, daily recovery, etc. */
 export function createOpenAIClient(
   options: CreateOpenAIClientOptions,
 ): OpenAI {
   const proxyUrl = resolveProxyUrl();
-  const fetchOptions: Record<string, unknown> = {};
-
-  if (proxyUrl) {
-    fetchOptions.dispatcher = new ProxyAgent(proxyUrl);
-  }
 
   return new OpenAI({
     apiKey: options.apiKey,
     ...(options.baseURL ? { baseURL: options.baseURL } : {}),
     timeout: options.timeout ?? 120_000,
     maxRetries: options.maxRetries ?? 2,
-    // undici fetch + ProxyAgent so Node traffic goes through the local VPN proxy
-    fetch: undiciFetch as unknown as typeof fetch,
-    //fetchOptions: fetchOptions as ConstructorParameters<typeof OpenAI>[0]["fetchOptions"],
+    ...(proxyUrl
+      ? {
+          // Must pass BOTH undici fetch and ProxyAgent dispatcher, or traffic bypasses the VPN.
+          fetch: undiciFetch as unknown as typeof fetch,
+          fetchOptions: {
+            dispatcher: new ProxyAgent(proxyUrl),
+          } as ConstructorParameters<typeof OpenAI>[0]["fetchOptions"],
+        }
+      : {}),
   });
 }
 
