@@ -40,7 +40,7 @@ export function createOpenAIClient(
     maxRetries: options.maxRetries ?? 2,
     // undici fetch + ProxyAgent so Node traffic goes through the local VPN proxy
     fetch: undiciFetch as unknown as typeof fetch,
-    fetchOptions: fetchOptions as ConstructorParameters<typeof OpenAI>[0]["fetchOptions"],
+    //fetchOptions: fetchOptions as ConstructorParameters<typeof OpenAI>[0]["fetchOptions"],
   });
 }
 
