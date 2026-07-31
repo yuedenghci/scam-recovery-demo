@@ -1,0 +1,299 @@
+export type Locale = "zh" | "en";
+
+export const LOCALE_STORAGE_KEY = "app-locale";
+export const DEFAULT_LOCALE: Locale = "zh";
+
+export type OptionKey =
+  | "震惊"
+  | "自责"
+  | "羞耻"
+  | "愤怒"
+  | "焦虑"
+  | "反复回想"
+  | "难受"
+  | "平静"
+  | "接受"
+  | "不想说"
+  | "其他"
+  | "吃不好"
+  | "睡不好"
+  | "对什么都提不起兴趣"
+  | "有伤害自己的想法"
+  | "已经伤害过自己"
+  | "正常"
+  | "在家"
+  | "在学校/单位"
+  | "在路上/交通中"
+  | "其他地方"
+  | "太审问式了"
+  | "没有理解我"
+  | "忽略了我刚才说的重点"
+  | "太顺从我了"
+  | "太官方了"
+  | "睡眠"
+  | "吃饭"
+  | "家务"
+  | "运动"
+  | "娱乐"
+  | "购物"
+  | "学习"
+  | "工作";
+
+export type Messages = {
+  lang: {
+    switchToEn: string;
+    switchToZh: string;
+    ariaLabel: string;
+  };
+  common: {
+    close: string;
+    cancel: string;
+    saving: string;
+    loading: string;
+    send: string;
+    back: string;
+    confirm: string;
+    ok: string;
+    multiSelectHint: string;
+    otherLabel: string;
+    otherLocationLabel: string;
+    otherOptionDefault: string;
+    otherLocationOption: string;
+  };
+  auth: {
+    login: {
+      title: string;
+      subtitle: string;
+      username: string;
+      password: string;
+      submit: string;
+      submitting: string;
+      goRegister: string;
+      fail: string;
+      networkFail: string;
+    };
+    register: {
+      title: string;
+      subtitle: string;
+      username: string;
+      password: string;
+      gender: string;
+      age: string;
+      education: string;
+      jobType: string;
+      scammedAmount: string;
+      scamWhen: string;
+      scamType: string;
+      scamWhenPlaceholder: string;
+      scamTypePlaceholder: string;
+      submit: string;
+      submitting: string;
+      goLogin: string;
+      fail: string;
+      networkFail: string;
+    };
+  };
+  onboarding: {
+    openingText: string;
+    endingText: string;
+    groupUser: string;
+    groupAi: string;
+    skipConfirmBody: string;
+    skipAnyway: string;
+    continueAnswer: string;
+    openingAck: string;
+    inputPlaceholder: string;
+    sendAnswer: string;
+    skipForNow: string;
+    expandHints: string;
+    collapseHints: string;
+    summaryAccurate: string;
+    revisionCapNote: string;
+    revisionCapAck: string;
+    confirmSummary: string;
+    supplementSummary: string;
+    revisionCount: (n: number) => string;
+    loadError: string;
+    flyNotice: string;
+    skipAnswer: string;
+    summaryEmpty: string;
+    summaryEmptyBullet: string;
+    summaryFallback: (short: string) => string;
+    combinedAnswer: (index: number, answer: string) => string;
+    supportSheetToggle: (open: boolean) => string;
+    clientSummaryEmpty: string;
+    clientSummaryEmptyBullet: string;
+    clientSummaryFallback: (short: string) => string;
+    hintLeadDefault: string;
+    modules: Record<string, string>;
+    lockedPlaceholder: string;
+    unlockedPlaceholder: string;
+    panelTitle: string;
+    panelSubtitle: string;
+    enterChatNote: string;
+    enterChat: string;
+    processing: string;
+    syncedReady: string;
+    saveFailed: string;
+    pageTitle: string;
+  };
+  chat: {
+    dailyRecovery: string;
+    writeDiary: string;
+    currentState: string;
+    more: string;
+    moreMenu: string;
+    editSupport: string;
+    logout: string;
+    greeting: string;
+    inputPlaceholder: string;
+    inputLabel: string;
+    sending: string;
+    typing: string;
+    streamFailHint: string;
+    dislikeSpeech: string;
+    suggestedAction: string;
+    addToRecovery: string;
+    updateCurrentState: string;
+    emotionalLegend: string;
+    emotionalOtherPlaceholder: string;
+    physicalLegend: string;
+    physicalOtherPlaceholder: string;
+    spatialLegend: string;
+    spatialOtherPlaceholder: string;
+    saveCurrentState: string;
+    recoverySidebar: string;
+    feedbackTitle: string;
+    feedbackIntro: string;
+    feedbackHint: string;
+    feedbackLegend: string;
+    feedbackOtherPlaceholder: string;
+    submitFeedback: string;
+    feedbackSelectReason: string;
+    feedbackFillOther: string;
+    feedbackReceived: string;
+    feedbackSubmitFail: string;
+    selectAllCategories: string;
+    emotionalOtherRequired: string;
+    physicalOtherRequired: string;
+    spatialOtherRequired: string;
+    stateSaved: string;
+    stateSaveFail: string;
+    addRecoverySuccess: string;
+    addRecoveryFail: string;
+    addRecoveryUnavailable: string;
+    dailyRecoveryDialog: string;
+  };
+  dailyRecovery: {
+    title: string;
+    subtitle: string;
+    ariaLabel: string;
+    intro: string;
+    startSetup: string;
+    selectDomain: string;
+    domainLegend: string;
+    domainOtherLabel: string;
+    domainOtherPlaceholder: string;
+    writeOwnTask: string;
+    next: string;
+    customOwnIntro: string;
+    customOwnHint: string;
+    customOwnPlaceholder: string;
+    saveAsTodayTask: string;
+    difficultyIntro: string;
+    difficultyHint: string;
+    difficultyPlaceholder: string;
+    generateCandidates: string;
+    generating: string;
+    generatingHint: string;
+    back: string;
+    backPrev: string;
+    pickIntro: string;
+    regenerateIntro: string;
+    regenerate: string;
+    regenerateSuggestionLabel: string;
+    regenerateSuggestionPlaceholder: string;
+    regenerateWithSuggestion: string;
+    currentTaskLabel: string;
+    noTaskYet: string;
+    continuationDays: (days: number) => string;
+    todayHow: string;
+    statusDone: string;
+    statusPartial: string;
+    statusSkipped: string;
+    feedbackDone: string;
+    feedbackPartial: string;
+    feedbackSkipped: string;
+    deleteTask: string;
+    addNewTask: string;
+    maxTasks: string;
+    fillDomainName: string;
+    fillDifficulty: string;
+    loadFail: string;
+    requestFail: string;
+    saveFail: string;
+    generateFail: string;
+    generateAbnormal: string;
+    submitFail: string;
+    deleteFail: string;
+    todayFeedback: string;
+    continueSetup: string;
+    confirm: string;
+    maxTasksSuffix: string;
+    listHeader: string;
+    gotIt: string;
+    continuationInvite: string;
+    continuationNotNow: string;
+    continuationWantDays: string;
+    continuationDaysQuestion: string;
+    continuationDaysHint: string;
+    continuationDaysLabel: string;
+    swapTask: string;
+    resetSetup: string;
+  };
+  diary: {
+    title: string;
+    historyTitle: string;
+    intro: string;
+    placeholder: string;
+    save: string;
+    viewHistory: string;
+    backToWrite: string;
+    empty: string;
+    expand: string;
+    collapse: string;
+    writeBeforeSave: string;
+    loadFail: string;
+    saveFail: string;
+  };
+  progress: {
+    lettersTitle: string;
+    lettersAria: string;
+    recentReplies: string;
+    noLetters: string;
+    letterContentAria: string;
+    openLetters: string;
+    unreadLetter: string;
+    viewLettersUnread: string;
+    viewLetters: string;
+    unreadBanner: string;
+    formatDate: (month: number, day: number) => string;
+  };
+  options: Record<OptionKey, string>;
+  api: {
+    loginMissing: string;
+    loginInvalid: string;
+    loginFail: string;
+    registerUsernameEmpty: string;
+    registerPasswordEmpty: string;
+    registerIncomplete: string;
+    registerUsernameTaken: string;
+    registerFail: string;
+    notLoggedIn: string;
+    notLoggedInChat: string;
+    saveFail: string;
+    loadFail: string;
+    diaryEmpty: string;
+    diarySaveFail: string;
+  };
+};
