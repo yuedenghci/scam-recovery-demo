@@ -2,9 +2,8 @@ import OpenAI from "openai";
 import { ProxyAgent, fetch as undiciFetch } from "undici";
 
 /**
- * System proxy (e.g. MonoProxy) works for browsers/curl but NOT for Node fetch.
- * Locally set OPENAI_HTTPS_PROXY=http://127.0.0.1:8118
- * Production (Vercel / EU-US): leave it unset — call api.openai.com directly.
+ * Local (China): set OPENAI_HTTPS_PROXY=http://127.0.0.1:8118
+ * Vercel / production: leave unset — Node uses the default global fetch.
  */
 function resolveProxyUrl(): string | undefined {
   return (
@@ -24,6 +23,21 @@ export type CreateOpenAIClientOptions = {
   maxRetries?: number;
 };
 
+/**
+ * Wrap undici fetch with a ProxyAgent. Prefer this over SDK `fetchOptions`
+ * so TypeScript stays compatible (`ClientOptions | undefined` has no indexed
+ * `fetchOptions` under ConstructorParameters).
+ */
+function createProxiedFetch(proxyUrl: string): typeof fetch {
+  const agent = new ProxyAgent(proxyUrl);
+  return ((input: RequestInfo | URL, init?: RequestInit) => {
+    return undiciFetch(input as Parameters<typeof undiciFetch>[0], {
+      ...(init as object),
+      dispatcher: agent,
+    } as Parameters<typeof undiciFetch>[1]);
+  }) as unknown as typeof fetch;
+}
+
 /** Shared OpenAI client used by chat, onboarding, daily recovery, etc. */
 export function createOpenAIClient(
   options: CreateOpenAIClientOptions,
@@ -35,15 +49,7 @@ export function createOpenAIClient(
     ...(options.baseURL ? { baseURL: options.baseURL } : {}),
     timeout: options.timeout ?? 120_000,
     maxRetries: options.maxRetries ?? 2,
-    ...(proxyUrl
-      ? {
-          // Must pass BOTH undici fetch and ProxyAgent dispatcher, or traffic bypasses the VPN.
-          fetch: undiciFetch as unknown as typeof fetch,
-          fetchOptions: {
-            dispatcher: new ProxyAgent(proxyUrl),
-          } as ConstructorParameters<typeof OpenAI>[0]["fetchOptions"],
-        }
-      : {}),
+    ...(proxyUrl ? { fetch: createProxiedFetch(proxyUrl) } : {}),
   });
 }
 
